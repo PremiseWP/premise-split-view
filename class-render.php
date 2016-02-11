@@ -3,11 +3,16 @@
  * The Render Class
  *
  * @package PSV
+ * @subpackage PSV\controller\render
  */
 
 
 /**
-* This class renders the split view
+* Render the Split View
+* 
+* This class is called when the split view custom type is loaded
+* in the front end. It displays the split view by calling the 
+* split view shortcode.
 */
 class PSV_Render_View {
 	
