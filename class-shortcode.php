@@ -267,12 +267,40 @@ class PSV_Shortcode {
 	 * @return string        html for video
 	 */
 	protected function youtube( $video = '' ) {
+
+		static $video_count = 1;
+
 		if ( empty( $video ) || ! is_string( $video ) ) {
 			return '';
 		}
 
+		// Extract video ID from URL.
+		if ( strpos( $video, 'https://' ) === 0 ) {
+
+			if ( strpos( $video, 'watch?v=' ) ) {
+
+				// For example: https:/www.youtube.com/watch?v=M7lc1UVf-VE
+				$video_id = substr( $video, strpos( $video, 'watch?v=' ) + 8 );
+
+			} elseif ( strpos( $video, 'youtu.be/' ) ) {
+
+				// For example: https://youtu.be/eNpZCFbZeUE
+				$video_id = substr( $video, strpos( $video, 'youtu.be/' ) + 9 );
+
+			} elseif ( strpos( $video, 'embed/' ) ) {
+
+				// For example: https://www.youtube.com/embed/eNpZCFbZeUE
+				$video_id = substr( $video, strpos( $video, 'embed/' ) + 6 );
+
+			} else { // No ID found!
+				return '';
+			}
+		} else {
+			$video_id = $video;
+		}
+
 		$_html = '<div class="psv-content-video">
-			<div class="psv-youtube-video" width="100%" height="100%" data-psv-video="'.$video.'"></div>
+			<div class="psv-youtube-video" data-psv-video="' . $video_id . '" id="psv-youtube-video-' . $video_count++ . '"></div>
 		</div>';
 
 		return $_html;

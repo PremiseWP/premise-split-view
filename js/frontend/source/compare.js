@@ -159,8 +159,8 @@ var PsvYouTubePlayer = {
 				var videoId = $(this).attr('data-psv-video');
 
 				new YT.Player($(this).attr('id'), {
-					height: '100%',
-					width: '100%',
+					height: $(this).css('height'),
+					width: $(this).css('width'),
 					videoId: videoId,
 					events: {
 						'onReady': '',

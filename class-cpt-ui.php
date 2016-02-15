@@ -178,7 +178,7 @@ class PSV_CPT_UI {
 		$_types = array(
 			'Post' => 'select',
 			'Shortcode' => 'text',
-			'YouTube' => 'text',
+			'YouTube' => 'video',
 			'Image' => 'wp_media',
 		);
 
