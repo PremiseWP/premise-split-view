@@ -275,26 +275,34 @@ class PSV_Shortcode {
 		}
 
 		// Extract video ID from URL.
-		if ( strpos( $video, 'https://' ) === 0 ) {
+		if ( strpos( $video, 'youtu' ) ) {
 
-			if ( strpos( $video, 'watch?v=' ) ) {
+			// http://stackoverflow.com/questions/5830387/how-to-find-all-youtube-video-ids-in-a-string-using-a-regex
+			$video_id = preg_replace( '~(?#!js YouTubeId Rev:20160125_1800)
+				# Match non-linked youtube URL in the wild. (Rev:20130823)
+				https?://          # Required scheme. Either http or https.
+				(?:[0-9A-Z-]+\.)?  # Optional subdomain.
+				(?:                # Group host alternatives.
+				  youtu\.be/       # Either youtu.be,
+				| youtube          # or youtube.com or
+				  (?:-nocookie)?   # youtube-nocookie.com
+				  \.com            # followed by
+				  \S*?             # Allow anything up to VIDEO_ID,
+				  [^\w\s-]         # but char before ID is non-ID char.
+				)                  # End host alternatives.
+				([\w-]{11})        # $1: VIDEO_ID is exactly 11 chars.
+				(?=[^\w-]|$)       # Assert next char is non-ID or EOS.
+				(?!                # Assert URL is not pre-linked.
+				  [?=&+%\w.-]*     # Allow URL (query) remainder.
+				  (?:              # Group pre-linked alternatives.
+				    [\'"][^<>]*>   # Either inside a start tag,
+				  | </a>           # or inside <a> element text contents.
+				  )                # End recognized pre-linked alts.
+				)                  # End negative lookahead assertion.
+				[?=&+%\w.-]*       # Consume any URL (query) remainder.
+				~ix', '$1',
+				$video );
 
-				// For example: https:/www.youtube.com/watch?v=M7lc1UVf-VE
-				$video_id = substr( $video, strpos( $video, 'watch?v=' ) + 8 );
-
-			} elseif ( strpos( $video, 'youtu.be/' ) ) {
-
-				// For example: https://youtu.be/eNpZCFbZeUE
-				$video_id = substr( $video, strpos( $video, 'youtu.be/' ) + 9 );
-
-			} elseif ( strpos( $video, 'embed/' ) ) {
-
-				// For example: https://www.youtube.com/embed/eNpZCFbZeUE
-				$video_id = substr( $video, strpos( $video, 'embed/' ) + 6 );
-
-			} else { // No ID found!
-				return '';
-			}
 		} else {
 			$video_id = $video;
 		}
