@@ -35,3 +35,26 @@ body.wp-admin.Premise-WP {}
 	visibility: visible;
 	opacity: 1;
 }
+
+
+/* 900px */
+@media screen and (max-width:900px) {
+
+	/* Horizontal line */
+	#premise-split-view .psv-ui-separator {
+		top: 50%;
+		left: 0;
+		height: 1px;
+		width: 100%;
+		margin-left: 0;
+	}
+
+	/* Reduce padding */
+	#premise-split-view .psv-cpt-ui {
+		padding: 30px 40px;
+	}
+
+	.psv-ui-insert {
+		min-height: 52px;
+	}
+}
