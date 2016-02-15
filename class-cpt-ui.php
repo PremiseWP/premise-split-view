@@ -1,14 +1,13 @@
-<?php 
+<?php
 /**
  * Custom post type UI class
  *
  * @package PSV
  */
 
-
 /**
-* The admin UI class. Loads our plugin custom post type UI.
-*/
+ * The admin UI class. Loads our plugin custom post type UI.
+ */
 class PSV_CPT_UI {
 
 	/**
@@ -23,8 +22,8 @@ class PSV_CPT_UI {
 
 
 	/**
-	 * holds array of types of content available for a user to insert.
-	 * 
+	 * Holds array of types of content available for a user to insert.
+	 *
 	 * @var array
 	 */
 	public $type_options = array(
@@ -34,7 +33,7 @@ class PSV_CPT_UI {
 		'YouTube Video' => 'YouTube',
 		'Image / Media' => 'Image',
 	);
-	
+
 
 
 
@@ -50,11 +49,10 @@ class PSV_CPT_UI {
 		return self::$instance;
 	}
 
-	
-	
+
 
 	/**
-	 * intentionally left blank
+	 * Intentionally left blank
 	 */
 	function __construct() {}
 
@@ -69,16 +67,18 @@ class PSV_CPT_UI {
 	}
 
 
-	
+
 
 
 	/**
 	 * Adds the meta box container.
+	 *
+	 * @param string $post_type Post type.
 	 */
 	public function add_meta_box( $post_type ) {
-		$post_types = array('premise_split_view');
+		$post_types = array( 'premise_split_view' );
 
-		if ( in_array( $post_type, $post_types )) {
+		if ( in_array( $post_type, $post_types ) ) {
 			add_meta_box(
 				'premise-split-view'
 				,'Build A Split View'
@@ -91,7 +91,7 @@ class PSV_CPT_UI {
 	}
 
 
-	
+
 
 
 
@@ -101,7 +101,7 @@ class PSV_CPT_UI {
 	 * @param WP_Post $post The post object.
 	 */
 	public function split_view_ui( $post ) {
-	
+
 		// Add an nonce field so we can check for it later.
 		wp_nonce_field( 'premise_split_view', 'premise_split_view_nonce' );
 
@@ -111,7 +111,6 @@ class PSV_CPT_UI {
 			<br>To insert this Split View anywhere in your site use the following shortcode <code>[psview id="<?php echo $post->ID; ?>"]</code></p>
 		</div>
 		<div class="premise-row premise-relative">
-			
 			<div class="col2 premise-align-center">
 				<div class="psv-cpt-ui psv-ui-left">
 					<?php $this->select_type( 'left' ); ?>
@@ -127,7 +126,21 @@ class PSV_CPT_UI {
 			</div>
 
 		</div>
-		<?php 
+		<div class="premise-ui-color">
+			<p>Change the color of the Split View controls.</p>
+		</div>
+		<div class="premise-row">
+			<?php premise_field(
+				'wp_color',
+				array(
+					'default'       => '#1652db', // Default blue.
+					'name'          => 'premise_split_view[color]',
+					'wrapper_class' => 'span12',
+				)
+			); ?>
+
+		</div>
+		<?php
 
 	}
 
@@ -137,9 +150,9 @@ class PSV_CPT_UI {
 	 * Insert the selct type fields
 	 *
 	 * The first step in creating a split view
-	 * 
-	 * @param  string $side which side fields belong to
-	 * @return string       html for fields for left or right side
+	 *
+	 * @param  string $side which side fields belong to.
+	 * @return string       html for fields for left or right side.
 	 */
 	public function select_type( $side = 'left' ) {
 		premise_field( 'select', array(
@@ -157,9 +170,9 @@ class PSV_CPT_UI {
 
 
 	/**
-	 * insert content fields
+	 * Insert content fields
 	 * 
-	 * @return string html for insert content sections
+	 * @return string html for insert content sections.
 	 */
 	public function insert_content( $side = 'left' ) {
 		$_types = array(
@@ -173,16 +186,17 @@ class PSV_CPT_UI {
 
 		foreach ( $_types as $k => $v ) {
 			$args = array(
-				'context' => 'post', 
+				'context' => 'post',
 				'name' => 'premise_split_view['.$side.']['.$k.']',
 			);
 
-			if ( 'Post' == $k )
+			if ( 'Post' == $k ) {
 				$args['options'] = $this->get_post_options();
-			
-			$html .= '<div class="psv-insert-content premise-absolute psv-insert-'.$k;
-			$html .= $k == premise_get_value( 'premise_split_view['.$side.'][type]', 'post' ) ? ' psv-content-active">' : '">';
-				
+			}
+
+			$html .= '<div class="psv-insert-content premise-absolute psv-insert-' . $k;
+			$html .= $k == premise_get_value( 'premise_split_view[' . $side . '][type]', 'post' ) ? ' psv-content-active">' : '">';
+
 				$html .= premise_field( $v, $args, false );
 
 			$html .= '</div>';
@@ -195,21 +209,21 @@ class PSV_CPT_UI {
 
 	/**
 	 * Get a list of all post and pages for our select dropdown
-	 * 
+	 *
 	 * @return array all posts and pages in array format: post_title => id
 	 */
 	protected function get_post_options() {
 		$_posts = get_posts( array( 'post_type' => array( 'post', 'page' ), 'post_status' => 'publish', 'posts_er_page' => -1 ) );
-		
+
 		$options = array();
 		$options['Select a Post/Page..'] = '';
 		foreach ( $_posts as $k => $v ) {
-			$options[$v->post_title] = $v->ID;
+			$options[ $v->post_title ] = $v->ID;
 		}
 		return $options;
 	}
 
-	
+
 
 
 
@@ -219,28 +233,30 @@ class PSV_CPT_UI {
 	 * @param int $post_id The ID of the post being saved.
 	 */
 	public function save( $post_id ) {
-		if ( ! isset( $_POST['premise_split_view_nonce'] ) )
+		if ( ! isset( $_POST['premise_split_view_nonce'] ) ) {
 			return $post_id;
+		}
 
 		$nonce = $_POST['premise_split_view_nonce'];
 
-		if ( ! wp_verify_nonce( $nonce, 'premise_split_view' ) )
+		if ( ! wp_verify_nonce( $nonce, 'premise_split_view' ) ) {
 			return $post_id;
+		}
 
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) 
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return $post_id;
+		}
 
-		if ( 'premise_split_view' !== $_POST['post_type'] ) 
+		if ( 'premise_split_view' !== $_POST['post_type'] ) {
 			return $post_id;
+		}
 
-		if ( ! current_user_can( 'edit_post', $post_id ) )
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return $post_id;
+		}
 
 		$mydata = $_POST['premise_split_view'];
 
 		update_post_meta( $post_id, 'premise_split_view', $mydata );
 	}
-
 }
-
-?>
