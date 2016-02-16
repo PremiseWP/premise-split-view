@@ -169,9 +169,9 @@ class PSV_Shortcode {
 
 		if ( isset( $view['type'] ) && ! empty( $view['type'] ) ) {
 
-			$_view = '<div class="psv-compare-it psv-compare-'.$side;
+			$_view = '<div class="psv-compare-it psv-compare-' . esc_attr( $side );
 
-			$_view .= ( 'right' == $side ) ? ' psv-compare-front" style="background: #FFFFFF;">'.$handle : '">';
+			$_view .= ( 'right' == $side ) ? ' psv-compare-front" style="background: #fff;">' . $handle : '">';
 
 			$_view .= '<div class="psv-compare-it-inner">';
 
@@ -203,7 +203,7 @@ class PSV_Shortcode {
 				$_html = $this->post( $cont );
 				break;
 
-			// Get a YouTube Video
+			// Get a YouTube or Vimeo Video.
 			case 'YouTube':
 				$_html = $this->youtube( $cont );
 				break;
@@ -245,9 +245,9 @@ class PSV_Shortcode {
 		if ( $post ) {
 			$_html = '<div class="psv-content-post">
 				<div class="psv-post-title">
-					<h3>'.$post->post_title.'</h3>
+					<h3>' . wp_kses_data( $post->post_title ) . '</h3>
 				</div>
-				<div class="psv-post-content">'.wpautop( wptexturize( $post->post_content ) ).'</div>
+				<div class="psv-post-content">' . wpautop( wptexturize( $post->post_content ) ) . '</div>
 			</div>';
 		}
 		else {
@@ -299,7 +299,7 @@ class PSV_Shortcode {
 
 	/**
 	 * Output the shortcode
-	 * 
+	 *
 	 * @return string the shortcode's html
 	 */
 	public function output() {
