@@ -30,7 +30,7 @@ class PSV_CPT_UI {
 		'Insert...' => '',
 		'Post / Page' => 'Post',
 		'Shortcode' => 'Shortcode',
-		'YouTube Video' => 'YouTube',
+		'YouTube or Vimeo Video' => 'YouTube',
 		'Image / Media' => 'Image',
 	);
 

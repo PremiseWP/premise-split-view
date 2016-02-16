@@ -268,52 +268,14 @@ class PSV_Shortcode {
 	 */
 	protected function youtube( $video = '' ) {
 
-		static $video_count = 1;
-
 		if ( empty( $video ) || ! is_string( $video ) ) {
 			return '';
 		}
 
-		// Extract video ID from URL.
-		if ( strpos( $video, 'youtu' ) ) {
-
-			// http://stackoverflow.com/questions/5830387/how-to-find-all-youtube-video-ids-in-a-string-using-a-regex
-			$video_id = preg_replace( '~(?#!js YouTubeId Rev:20160125_1800)
-				# Match non-linked youtube URL in the wild. (Rev:20130823)
-				https?://          # Required scheme. Either http or https.
-				(?:[0-9A-Z-]+\.)?  # Optional subdomain.
-				(?:                # Group host alternatives.
-				  youtu\.be/       # Either youtu.be,
-				| youtube          # or youtube.com or
-				  (?:-nocookie)?   # youtube-nocookie.com
-				  \.com            # followed by
-				  \S*?             # Allow anything up to VIDEO_ID,
-				  [^\w\s-]         # but char before ID is non-ID char.
-				)                  # End host alternatives.
-				([\w-]{11})        # $1: VIDEO_ID is exactly 11 chars.
-				(?=[^\w-]|$)       # Assert next char is non-ID or EOS.
-				(?!                # Assert URL is not pre-linked.
-				  [?=&+%\w.-]*     # Allow URL (query) remainder.
-				  (?:              # Group pre-linked alternatives.
-				    [\'"][^<>]*>   # Either inside a start tag,
-				  | </a>           # or inside <a> element text contents.
-				  )                # End recognized pre-linked alts.
-				)                  # End negative lookahead assertion.
-				[?=&+%\w.-]*       # Consume any URL (query) remainder.
-				~ix', '$1',
-				$video );
-
-		} else {
-			$video_id = $video;
-		}
-
-		$_html = '<div class="psv-content-video">
-			<div class="psv-youtube-video" data-psv-video="' . $video_id . '" id="psv-youtube-video-' . $video_count++ . '"></div>
-		</div>';
+		$_html = '<div class="psv-content-video">' . premise_output_video( $video ) . '</div>';
 
 		return $_html;
 	}
-
 
 
 

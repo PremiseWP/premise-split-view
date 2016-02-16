@@ -201,8 +201,7 @@ class Premise_Split_View {
 		wp_register_style( 'psv_fe_css', $this->plugin_url . '/css/style.min.css' );
 		wp_enqueue_style( 'psv_fe_css' );
 
-		wp_register_script( 'psv_yt_api', 'https://www.youtube.com/iframe_api' );
-		wp_register_script( 'psv_fe_js', $this->plugin_url . '/js/frontend/psv-fe.min.js', array( 'psv_yt_api', 'jquery' ) );
+		wp_register_script( 'psv_fe_js', $this->plugin_url . '/js/frontend/psv-fe.min.js', array( 'jquery' ) );
 		wp_enqueue_script( 'psv_fe_js' );
 	}
 
