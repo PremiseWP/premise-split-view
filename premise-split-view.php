@@ -1,13 +1,14 @@
 <?php 
-/*
+/**
  * Plugin Name: Premise Split View
- * Plugin URI:  http://
- * Description: 
- * Version:     0.1.0
- * Author:      Mario Vallejo
- * Author URI:  
- * Text Domain: 
- * Domain Path: 
+ * Plugin URI:  https://github.com/PremiseWP/premise-split-view
+ * Description: Create Split Views.
+ * Version:     0.2.0
+ * Author:      Premise WP
+ * Author URI:  http://premisewp.com
+ * License:     GPL
+ *
+ * @package PSV
  */
 
 
