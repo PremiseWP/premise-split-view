@@ -1,14 +1,13 @@
-<?php 
+<?php
 /**
  * Shortcode class
  *
  * @package PSV
  */
 
-
 /**
-* The shortcode class. Loads and registers our plugin's shortcode.
-*/
+ * The shortcode class. Loads and registers our plugin's shortcode.
+ */
 class PSV_Shortcode {
 
 	/**
@@ -23,8 +22,8 @@ class PSV_Shortcode {
 
 
 	/**
-	 * holds the shortcode attributes
-	 * 
+	 * Holds the shortcode attributes
+	 *
 	 * @var array
 	 */
 	public $atts = array();
@@ -33,8 +32,8 @@ class PSV_Shortcode {
 
 
 	/**
-	 * holds the options for each split view
-	 * 
+	 * Holds the options for each split view
+	 *
 	 * @var array
 	 */
 	public $split_view = array();
@@ -43,12 +42,12 @@ class PSV_Shortcode {
 
 
 	/**
-	 * holds HTML string for this shortcode
-	 * 
+	 * Holds HTML string for this shortcode
+	 *
 	 * @var string
 	 */
 	public $html = '';
-	
+
 
 
 
@@ -64,30 +63,30 @@ class PSV_Shortcode {
 		return self::$instance;
 	}
 
-	
-	
+
+
 
 	/**
-	 * intentionally left blank
+	 * Intentionally left blank.
 	 */
 	function __construct() {}
 
 
 
 	/**
-	 * initiate our class. Gets shortcode atts and if id exists it builds
+	 * Initiate our class. Gets shortcode atts and if id exists it builds
 	 * our object and split view. Ohterwise, it retunrs an error message saying
 	 * that the id is required.
 	 *
 	 * @return string html for the split view or error message
 	 */
 	public function init( $atts ) {
-		
+
 		$this->atts = shortcode_atts( array(
-	        'id' => ''
+	        'id' => '',
 	    ), $atts, 'psview' );
 
-	    // first, check if there is an id
+	    // First, check if there is an id.
 		if ( isset( $this->atts['id'] ) && ! empty( $this->atts['id'] ) ) {
 			$this->prepare();
 			return $this->output();
@@ -99,11 +98,11 @@ class PSV_Shortcode {
 
 
 	/**
-	 * gets the split view data and builds the view if data not empty
+	 * Gets the split view data and builds the view if data not empty
 	 */
 	protected function prepare() {
 
-		// get the split view 
+		// Get the split view.
 		$this->split_view = premise_get_value( 'premise_split_view', array( 'context' => 'post', 'id' => (int) $this->atts['id'] ) );
 
 		if ( $this->split_view && ! empty( $this->split_view ) ) {
@@ -119,15 +118,15 @@ class PSV_Shortcode {
 
 	/**
 	 * Builds the split view
-	 * 
+	 *
 	 * @return string html for split view
 	 */
 	protected function build() {
 		$_html = '<div class="psv-compare-wrapper">
 			<div class="psv-compare-inner">';
-				// Get right and left side views
+				// Get right and left side views.
 				foreach( $this->split_view as $side => $view ) {
-					// get content if type exists and is not empty 
+					// Get content if type exists and is not empty.
 					if ( isset( $view['type'] ) && ! empty( $view['type'] ) )
 						$_html .= $this->get_view( $side );
 				}
@@ -141,19 +140,27 @@ class PSV_Shortcode {
 
 
 	/**
-	 * get each view. Left or Right side.
-	 * 
-	 * @param  string $side left or right. determines which side to get
-	 * @return string       html for one side
+	 * Get each view. Left or Right side.
+	 *
+	 * @param  string $side left or right. determines which side to get.
+	 * @return string       html for one side.
 	 */
 	protected function get_view( $side ) {
-		
-		if ( empty( $side ) || ! is_string( $side ) )
+
+		if ( empty( $side ) || ! is_string( $side ) ) {
 			return false;
+		}
 
 		$view = ( 'left' == $side ) ? $this->left : $this->right;
 
-		$handle = '<div class="psv-compare-handle">
+		$inline_style = '';
+
+		if ( isset( $this->split_view['color'] )
+			&& $this->split_view['color'] !== '#1652db' ) {
+			$inline_style = ' style="background-color:' . esc_attr( $this->split_view['color'] ) . ';"';
+		}
+
+		$handle = '<div class="psv-compare-handle"' . $inline_style . '>
 			<a href="javascript:;" class="psv-slide-left"><i class="fa fa-caret-left"></i></a>
 			<a href="javascript:;" class="psv-slide-right"><i class="fa fa-caret-right"></i></a>
 		</div>';
@@ -162,13 +169,13 @@ class PSV_Shortcode {
 
 		if ( isset( $view['type'] ) && ! empty( $view['type'] ) ) {
 
-			$_view = '<div class="psv-compare-it psv-compare-'.$side;
+			$_view = '<div class="psv-compare-it psv-compare-' . esc_attr( $side );
 
-			$_view .= ( 'right' == $side ) ? ' psv-compare-front" style="background: #FFFFFF;">'.$handle : '">';
+			$_view .= ( 'right' == $side ) ? ' psv-compare-front" style="background: #fff;">' . $handle : '">';
 
 			$_view .= '<div class="psv-compare-it-inner">';
 
-			// get the content for each view
+			// Get the content for each view.
 			$_view .= '<div class="psv-content">' . $this->content( $view ) . '</div>';
 
 			$_view .= '</div></div>';
@@ -182,8 +189,8 @@ class PSV_Shortcode {
 
 	/**
 	 * Get content depending on the type
-	 * 
-	 * @param  array  $view left or right view data ( type => content )
+	 *
+	 * @param  array  $view left or right view data ( type => content ).
 	 * @return string       html for content
 	 */
 	protected function content( $view = array() ) {
@@ -196,22 +203,22 @@ class PSV_Shortcode {
 				$_html = $this->post( $cont );
 				break;
 
-			// Get a YouTube Video
+			// Get a YouTube or Vimeo Video.
 			case 'YouTube':
 				$_html = $this->youtube( $cont );
 				break;
 
-			// Get a YouTube Video
+			// Get an image.
 			case 'Image':
 				$_html = $this->image( $cont );
 				break;
 
-			// Get a Shortcode
+			// Get a Shortcode.
 			case 'Shortcode':
 				$_html = do_shortcode( $cont );
 				break;
-			
-			// return empty string as default
+
+			// Return empty string as default.
 			default:
 				$_html = '';
 				break;
@@ -223,23 +230,24 @@ class PSV_Shortcode {
 
 
 	/**
-	 * returns the content for a post
-	 * 
-	 * @param  string|int $id id of post to retreive
+	 * Returns the content for a post
+	 *
+	 * @param  string|int $id id of post to retreive.
 	 * @return string     html for content. or empty string
 	 */
 	protected function post( $id = '' ) {
-		if ( empty( $id ) || ! is_numeric( $id ) )
+		if ( empty( $id ) || ! is_numeric( $id ) ) {
 			return '';
+		}
 
 		$post = (object) get_post( $id );
 
 		if ( $post ) {
 			$_html = '<div class="psv-content-post">
 				<div class="psv-post-title">
-					<h3>'.$post->post_title.'</h3>
+					<h3>' . wp_kses_data( $post->post_title ) . '</h3>
 				</div>
-				<div class="psv-post-content">'.wpautop( wptexturize( $post->post_content ) ).'</div>
+				<div class="psv-post-content">' . wpautop( wptexturize( $post->post_content ) ) . '</div>
 			</div>';
 		}
 		else {
@@ -253,34 +261,34 @@ class PSV_Shortcode {
 
 
 	/**
-	 * get a youtube video
-	 * 
-	 * @param  string $video video id
+	 * Get a youtube video
+	 *
+	 * @param  string $video video id.
 	 * @return string        html for video
 	 */
 	protected function youtube( $video = '' ) {
-		if ( empty( $video ) || ! is_string( $video ) )
-			return '';
 
-		$_html = '<div class="psv-content-video">
-			<div class="psv-youtube-video" width="100%" height="100%" data-psv-video="'.$video.'"></div>
-		</div>';
+		if ( empty( $video ) || ! is_string( $video ) ) {
+			return '';
+		}
+
+		$_html = '<div class="psv-content-video">' . premise_output_video( $video ) . '</div>';
 
 		return $_html;
 	}
 
 
 
-
 	/**
-	 * get an image
-	 * 	
-	 * @param  string $url url for image
+	 * Get an image
+	 *
+	 * @param  string $url url for image.
 	 * @return string      div with image as background
 	 */
 	protected function image( $url = '' ) {
-		if ( empty( $url ) || ! is_string( $url ) )
+		if ( empty( $url ) || ! is_string( $url ) ) {
 			return '';
+		}
 
 		$_html = '<div class="psv-content-image" style="background-image: url('.$url.');"></div>';
 
@@ -290,14 +298,15 @@ class PSV_Shortcode {
 
 
 	/**
-	 * output the shortcode
-	 * 
+	 * Output the shortcode
+	 *
 	 * @return string the shortcode's html
 	 */
 	public function output() {
-		if ( '' !== $this->html ) 
+		if ( '' !== $this->html ) {
 			return $this->html;
+		}
+
 		return '<p>Looks like there was an issue building the Split View.</p>';
 	}
-
 }

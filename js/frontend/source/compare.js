@@ -3,7 +3,6 @@
  */
 (function($){
 
-
 	$(document).ready(function(){
 		dragCompare();
 	});
@@ -18,8 +17,6 @@
 	    	});
 	    }
 	}
-
-
 
 
 	function compareThis(container, makeDraggable, sectionsClickable) {
@@ -66,6 +63,7 @@
 			doClickableSections();
 		}
 
+
 	    function doDraggable() {
 	    	handle.on('mousedown', function() {
 		        // start resizing
@@ -91,6 +89,7 @@
 		    });
 		    return false;
 	    }
+
 
 	    function doClickableSections() {
 	    	$('.psv-compare-left, .psv-compare-right').addClass('psv-compare-clickable');
@@ -150,7 +149,6 @@
 var PsvYouTubePlayer = {
 
 	init: function($, YT) {
-		console.log('run!');
 		// Begin YouTube Player when needed
 		if ( $('.psv-youtube-video').length > 0 ) {
 			var ytVideos = $('.psv-youtube-video');
@@ -167,7 +165,7 @@ var PsvYouTubePlayer = {
 						'onStateChange': ''
 					}
 				});
-			})
+			});
 		}
 	}
 }
