@@ -9,7 +9,7 @@
 
 
 	function psvToggleSelect() {
-		$('.psv-cpt-ui select').change(function(){
+		$('#premise_split_view-left-type, #premise_split_view-right-type').change(function(){
 			var type = $(this).val();
 
 			$(this).parents('.psv-cpt-ui').find('.psv-insert-content').removeClass( 'psv-content-active' );

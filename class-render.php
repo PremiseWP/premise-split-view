@@ -76,7 +76,7 @@ class PSV_Render_View {
 		}
 
 		else {
-			return $post->post_content;
+			return $content;
 		}
 	}
 }
