@@ -3,6 +3,7 @@
  */
 (function($){
 
+
 	$(document).ready(function(){
 		dragCompare();
 	});
@@ -17,6 +18,8 @@
 	    	});
 	    }
 	}
+
+
 
 
 	function compareThis(container, makeDraggable, sectionsClickable) {
@@ -63,7 +66,6 @@
 			doClickableSections();
 		}
 
-
 	    function doDraggable() {
 	    	handle.on('mousedown', function() {
 		        // start resizing
@@ -89,7 +91,6 @@
 		    });
 		    return false;
 	    }
-
 
 	    function doClickableSections() {
 	    	$('.psv-compare-left, .psv-compare-right').addClass('psv-compare-clickable');
@@ -139,40 +140,3 @@
 	}
 
 })(jQuery);
-
-
-/**
- * YouTube
- */
-var PsvYouTubePlayer = {
-
-	init: function($, YT) {
-		// Begin YouTube Player when needed
-		if ( $('.psv-youtube-video').length > 0 ) {
-			var ytVideos = $('.psv-youtube-video');
-
-			ytVideos.each(function(i,v){
-				var videoId = $(this).attr('data-psv-video');
-
-				new YT.Player($(this).attr('id'), {
-					height: '100%',
-					width: '100%',
-					videoId: videoId,
-					events: {
-						'onReady': '',
-						'onStateChange': ''
-					}
-				});
-			});
-		}
-	}
-}
-
-
-
-
-function onYouTubeIframeAPIReady() {
-	(function($){
-		PsvYouTubePlayer.init($, YT);
-	})(jQuery);
-}
