@@ -242,7 +242,23 @@ class PSV_Shortcode {
 
 		$post = (object) get_post( $id );
 
-		if ( $post ) {
+		if ( 'page' == $post->post_type ) {
+			// Do not rely on get_page_template(). Get the value the user has selected for this page directly
+			// During testing we experienced discrepancies using get_page_template()
+			$_template = premise_get_value( '_wp_page_template', array( 'context' => 'post', 'id' => $post->ID ) );
+			// Normalize the template 
+			var_dump($_template);
+			$template = ( ! $_template || 'default' == $_template ) ? 'page.php' : (string) $_template;
+			var_dump($template);
+			ob_start();
+			if ( $template_found = locate_template( $template ) ) {
+				load_template( $template_found );
+			} /*else {
+				load_template( get_template_directory_uri() . '/page.php' );
+			}*/
+			$_html = ob_get_clean();
+		}
+		elseif ( 'post' == $post->post_type ) {
 			$_html = '<div class="psv-content-post">
 				<div class="psv-post-title">
 					<h3>' . wp_kses_data( $post->post_title ) . '</h3>
