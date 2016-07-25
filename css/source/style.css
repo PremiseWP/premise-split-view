@@ -24,6 +24,7 @@
 	background-repeat: no-repeat;
 	background-size: auto 100%;
 }
+
 .psv-compare-left {
 	left: 0;
 	background-position: top left;
@@ -74,7 +75,7 @@
 	cursor: move;
 }
 
-.psv-compare-handle .psv-slide-right, 
+.psv-compare-handle .psv-slide-right,
 .psv-compare-handle .psv-slide-left {
 	position: absolute;
 	top: 50%;
@@ -88,9 +89,9 @@
 	transition: all .4s ease-in-out;
 }
 
-.psv-compare-handle .psv-slide-right, 
+.psv-compare-handle .psv-slide-right,
 .psv-compare-handle .psv-slide-left,
-.psv-compare-handle .psv-slide-right .fa, 
+.psv-compare-handle .psv-slide-right .fa,
 .psv-compare-handle .psv-slide-left .fa {
 	line-height: 60px;
 	height: 60px;
@@ -111,12 +112,12 @@
 	border-radius: 30px 0 0 30px;
 }
 
-.psv-compare-handle .psv-slide-right:hover, 
+.psv-compare-handle .psv-slide-right:hover,
 .psv-compare-handle .psv-slide-left:hover,
 .psv-compare-handle:hover .psv-slide-right,
 .psv-compare-handle:hover .psv-slide-left {
 	opacity: 0.8;
-	
+
 }
 
 

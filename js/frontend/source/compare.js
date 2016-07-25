@@ -1,37 +1,49 @@
 /**
- * This code works but needs to be enqueued properly
+ * Premise Split View plugin main JS file
  */
-(function($){
+( function($) {
 
+	// decalere our global variables
+	var psvWrapper;
 
+	// On document ready
 	$(document).ready(function(){
-		dragCompare();
+
+		// reference our wrapper
+		psvWrapper = $('.psv-compare-inner');
+
+		// initiate the split view
+		psvDragCompareInit();
 	});
 
-	function dragCompare() {
-	    var container = $('.psv-compare-inner');
-	    
-	    if ( container.length > 0 ) {
-	    	container.each(function(){
-	    		var compare = $(this);
-	    		compareThis(compare);
+	// initiate the drag compare functionlality
+	function psvDragCompareInit() {
+	    if ( psvWrapper.length > 0 ) {
+	    	psvWrapper.each( function() {
+	    		var compare = $( this );
+	    		compareThis( compare );
+	    		$( window ).resize( function() {
+	    			compareThis( compare );
+	    		} );
 	    	});
 	    }
+	    return false;
 	}
 
-
-
-
+	// Start the split view. This is what creates the actual functionality.
 	function compareThis(container, makeDraggable, sectionsClickable) {
+		// if ( $( window ).width() <= 750 ) return false;
+
 		container         = container         || null;
 		makeDraggable     = 'boolean' === typeof makeDraggable     ? makeDraggable     : true;
 		sectionsClickable = 'boolean' === typeof sectionsClickable ? sectionsClickable : false;
 
-		// Check if the container exists first 
+		// Check if the container exists first
 		if ( ! container ) {
 			return false;
 		}
 
+		// reference our variables
 		var front  = container.find('.psv-compare-front'),
 	    handle     = container.find('.psv-compare-handle'),
 	    content    = container.find('.psv-content'),
@@ -44,6 +56,7 @@
 	    content.width( container.width() );
 	    $(window).resize( function(){
 	    	content.width( container.width() );
+	    	slideCenter();
 	    });
 
 	    left.click(slideRight);
@@ -59,13 +72,14 @@
 	    	handle.click(slideCenter);
 	    }
 
-	    // if left and right sections shoudl be clickable 
+	    // if left and right sections shoudl be clickable
 		// Adds the class used to bind that event
 		// Currently not supported if handle is draggable
 		if ( sectionsClickable && ! makeDraggable ) {
 			doClickableSections();
 		}
 
+		// bind the draggable functionality
 	    function doDraggable() {
 	    	handle.on('mousedown', function() {
 		        // start resizing
@@ -73,7 +87,7 @@
 		    	isResizing = true;
 				$(document).on('mousemove', function (e) {
 					// we don't want to do anything if we aren't resizing.
-				    if (!isResizing) 
+				    if (!isResizing)
 				        return;
 				    var offsetRight = container.width() - (e.clientX - container.offset().left);
 
@@ -92,9 +106,10 @@
 		    return false;
 	    }
 
+	    // bnd the clickable section
 	    function doClickableSections() {
 	    	$('.psv-compare-left, .psv-compare-right').addClass('psv-compare-clickable');
-	    
+
 		    // bind comparing sections
 		    // allows clicking on the left or right switch
 		    $('.psv-compare-left.psv-compare-clickable').click(function() {
@@ -108,7 +123,7 @@
 			return false;
 	    }
 
-
+	    // slide left
 	    function slideLeft() {
 	    	front.removeClass('psv-slided-left');
 	        front.addClass('psv-slided-right');
@@ -118,18 +133,18 @@
 	        return false;
 	    }
 
-
+	    // slide right
 	    function slideRight() {
 	    	front.removeClass('psv-slided-right');
 	        front.addClass('psv-slided-left');
 	        var width = container.width() - rightOffset;
 	        front.animate({
-	        	width: width 
+	        	width: width
 	        }, 400);
 	        return false;
 	    }
 
-
+	    // slide to cnenter
 	    function slideCenter() {
 	    	front.removeClass('psv-slided-left psv-slided-right');
 	    	front.animate({

@@ -1,9 +1,9 @@
-<?php 
+<?php
 /**
  * Plugin Name: Premise Split View
  * Plugin URI:  https://github.com/PremiseWP/premise-split-view
  * Description: Create Split Views.
- * Version:     0.2.0
+ * Version:     1.0.0
  * Author:      Premise WP
  * Author URI:  http://premisewp.com
  * License:     GPL
@@ -80,22 +80,20 @@ class Premise_Split_View {
 
 	/**
 	 * The arguments used to create our custom post type
-	 * 
+	 *
 	 * @var array
 	 */
 	public $cpt_args = array(
 		'name' => array(
 		    'post_type_name' => 'premise_split_view',
-		    'singular' => 'Split View',
-		    'plural' => 'Split Views',
-		    'slug' => 'split-view'
+		    'singular'       => 'Split View',
+		    'plural'         => 'Split Views',
+		    'slug'           => 'split-view',
 		),
 		'args' => array(
 			'supports' => array( 'title' ),
 		),
 	);
-
-
 
 
 
@@ -135,9 +133,9 @@ class Premise_Split_View {
 	 * @since   1.0
 	 */
 	public function setup() {
-		
+
 		$this->includes();
-		
+
 		// Create custom post type for split Views
 		if ( class_exists( 'PremiseCPT' ) )
 			new PremiseCPT( $this->cpt_args['name'], $this->cpt_args['args'] );
@@ -169,15 +167,17 @@ class Premise_Split_View {
 			add_action( 'tgmpa_register', array( $this, 'psview_register_required_plugins' ) );
 		}
 
-		include 'class-cpt-ui.php';
-		include 'class-render.php';
-		include 'class-shortcode.php';
+		include 'classes/class-cpt-ui.php';
+		include 'classes/class-render.php';
+		include 'classes/class-shortcode.php';
 	}
 
 
 
 	/**
-	 * initiate UI
+	 * initiates the UI. registers the custom post type UI
+	 *
+	 * @return void does not return anything
 	 */
 	public function init_ui() {
 		add_action( 'load-post.php', array( PSV_CPT_UI::get_instance(), 'render_ui' ) );
@@ -186,7 +186,11 @@ class Premise_Split_View {
 
 
 
-
+	/**
+	 * Resgisters admin scripts
+	 *
+	 * @return void does not return anything
+	 */
 	public function admin_scripts() {
 		wp_register_style( 'psv_admin_css', $this->plugin_url . '/css/admin/psv-admin.min.css' );
 		wp_enqueue_style( 'psv_admin_css' );
@@ -197,7 +201,11 @@ class Premise_Split_View {
 
 
 
-
+	/**
+	 * resgister the front end scripts
+	 *
+	 * @return void does not return anything
+	 */
 	public function fe_scripts() {
 		wp_register_style( 'psv_fe_css', $this->plugin_url . '/css/style.min.css' );
 		wp_enqueue_style( 'psv_fe_css' );
@@ -205,10 +213,6 @@ class Premise_Split_View {
 		wp_register_script( 'psv_fe_js', $this->plugin_url . '/js/frontend/psv-fe.min.js', array( 'jquery' ) );
 		wp_enqueue_script( 'psv_fe_js' );
 	}
-
-
-
-
 
 
 
@@ -228,17 +232,12 @@ class Premise_Split_View {
 		 */
 		$plugins = array(
 
-			// Include Premise-WP plugin.
 			array(
-				'name'               => 'Premise-WP', // The plugin name.
-				'slug'               => 'Premise-WP', // The plugin slug (typically the folder name).
-				'source'             => 'https://github.com/PremiseWP/Premise-WP/archive/master.zip', // The plugin source.
-				'required'           => true, // If false, the plugin is only 'recommended' instead of required.
-				// 'version'            => '', // E.g. 1.0.0. If set, the active plugin must be this version or higher. If the plugin version is higher than the plugin version installed, the user will be notified to update the plugin.
-				'force_activation'   => false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch.
-				// 'force_deactivation' => false, // If true, plugin is deactivated upon theme switch, useful for theme-specific plugins.
-				// 'external_url'       => '', // If set, overrides default API URL and points to an external URL.
-				// 'is_callable'        => '', // If set, this callable will be be checked for availability to determine if a plugin is active.
+				'name'               => 'Premise-WP',
+				'slug'               => 'Premise-WP',
+				'source'             => 'https://github.com/PremiseWP/Premise-WP/archive/master.zip',
+				'required'           => true,
+				'force_activation'   => false,
 			),
 		);
 
@@ -246,16 +245,16 @@ class Premise_Split_View {
 		 * Array of configuration settings.
 		 */
 		$config = array(
-			'id'           => 'psview-tgmpa',         // Unique ID for hashing notices for multiple instances of TGMPA.
-			'default_path' => '',                      // Default absolute path to bundled plugins.
-			'menu'         => 'tgmpa-install-plugins', // Menu slug.
-			'parent_slug'  => 'plugins.php',            // Parent menu slug.
-			'capability'   => 'install_plugins',    // Capability needed to view plugin install page, should be a capability associated with the parent menu used.
-			'has_notices'  => true,                    // Show admin notices or not.
-			'dismissable'  => false,                    // If false, a user cannot dismiss the nag message.
-			'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
-			'is_automatic' => true,                   // Automatically activate plugins after installation or not.
-			'message'      => '',                      // Message to output right before the plugins table.
+			'id'           => 'psview-tgmpa',
+			'default_path' => '',
+			'menu'         => 'tgmpa-install-plugins',
+			'parent_slug'  => 'plugins.php',
+			'capability'   => 'install_plugins',
+			'has_notices'  => true,
+			'dismissable'  => false,
+			'dismiss_msg'  => '',
+			'is_automatic' => true,
+			'message'      => '',
 		);
 
 		tgmpa( $plugins, $config );
