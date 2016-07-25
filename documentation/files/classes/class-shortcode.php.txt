@@ -78,6 +78,8 @@ class PSV_Shortcode {
 	 * our object and split view. Ohterwise, it retunrs an error message saying
 	 * that the id is required.
 	 *
+	 * @param array $atts array of attributes for the shortcode.
+	 *
 	 * @return string html for the split view or error message
 	 */
 	public function init( $atts ) {

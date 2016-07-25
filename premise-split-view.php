@@ -233,11 +233,12 @@ class Premise_Split_View {
 		$plugins = array(
 
 			array(
-				'name'               => 'Premise-WP',
-				'slug'               => 'Premise-WP',
-				'source'             => 'https://github.com/PremiseWP/Premise-WP/archive/master.zip',
-				'required'           => true,
-				'force_activation'   => false,
+				'name'             => 'Premise-WP',
+				'slug'             => 'Premise-WP',
+				'source'           => 'https://github.com/PremiseWP/Premise-WP/archive/master.zip',
+				'required'         => true,
+				'force_activation' => false,
+				'version'          => '1.4.3',
 			),
 		);
 

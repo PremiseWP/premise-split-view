@@ -169,6 +169,8 @@ class PSV_CPT_UI {
 	/**
 	 * Insert content fields
 	 *
+	 * @param string $side the side to load the content for
+	 *
 	 * @return string html for insert content sections.
 	 */
 	public function insert_content( $side = 'left' ) {

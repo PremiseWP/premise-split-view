@@ -62,7 +62,9 @@ class PSV_Render_View {
 	/**
 	 * Checks that we are in the right post type and displays the view.
 	 *
-	 * @return string shortcode html for view
+	 * @param string $content the current content being loaded by Wordpress
+	 *
+	 * @return string shortcode html for view or the content that was going to be loaded any ways.
 	 */
 	public function init( $content ) {
 
