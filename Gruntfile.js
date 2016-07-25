@@ -70,8 +70,17 @@ module.exports = function(grunt) {
 					'css/admin/psv-admin.min.css': ['css/admin/source/*.css']
 				}
 			}
-		}
-		
+		},
+
+		phpdocumentor: {
+	        dist: {
+	            options: {
+	                directory : './',
+	                target : 'documentation'
+	            }
+	        }
+	    }
+
 	});
 
 	/**
@@ -81,6 +90,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-autoprefixer');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+
+	grunt.loadNpmTasks('grunt-phpdocumentor');
 
 	// Default task(s).
 	grunt.registerTask( 'default', ['watch'] );
