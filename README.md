@@ -6,5 +6,5 @@ Create a split view and insert it anywhere in your WordPress site. This lets you
 
 ## Changelog
 
-* 1.0.0 -
+* **1.0.0 -**
 	* New version
