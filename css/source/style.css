@@ -154,7 +154,7 @@
 	position: relative;
 }
 
-.premise-video,
+.psv-content-video .premise-video,
 .psv-content-image {
 	position: absolute;
 	margin: 0;
