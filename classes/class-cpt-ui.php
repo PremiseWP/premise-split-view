@@ -27,11 +27,12 @@ class PSV_CPT_UI {
 	 * @var array
 	 */
 	public $type_options = array(
-		'Insert...'              => '',
-		'Post / Page'            => 'Post',
-		'Shortcode'              => 'Shortcode',
-		'YouTube or Vimeo Video' => 'YouTube',
-		'Image / Media'          => 'Image',
+		'Insert...'         => '',
+		'Post or Page'      => 'Post',
+		'Shortcode'         => 'Shortcode',
+		'Full Screen Video' => 'YouTube',
+		'Full Screen Image' => 'Image',
+		'Insert My Own'     => 'Insert',
 	);
 
 
@@ -62,7 +63,7 @@ class PSV_CPT_UI {
 	 * Register hooks for metabox and saving fields into post
 	 */
 	public function render_ui() {
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ), 1.01 );
 		add_action( 'save_post'     , array( $this, 'save' ) );
 	}
 
@@ -179,6 +180,7 @@ class PSV_CPT_UI {
 			'Shortcode' => 'text',
 			'YouTube'   => 'video',
 			'Image'     => 'wp_media',
+			'Insert'    => 'textarea',
 		);
 
 		$html = '';
@@ -195,6 +197,12 @@ class PSV_CPT_UI {
 
 			$html .= '<div class="psv-insert-content premise-absolute psv-insert-' . $k;
 			$html .= $k == premise_get_value( 'premise_split_view[' . $side . '][type]', 'post' ) ? ' psv-content-active">' : '">';
+
+				if ( 'Insert' == $k ) {
+					$args['class'] = 'premise-hidden';
+
+					$html .= '<a href="javascript:;" class="premise-btn psview-edit-insert">Edit Content</a>';
+				}
 
 				$html .= premise_field( $v, $args, false );
 
@@ -224,6 +232,33 @@ class PSV_CPT_UI {
 			$options[ $v->post_title ] = $v->ID;
 		}
 		return $options;
+	}
+
+
+
+	public function insert_footer() {
+		global $post;
+		$post_types = array( 'premise_split_view' );
+
+		$html = '';
+		if ( in_array( $post->post_type, $post_types ) ) {
+			ob_start();
+			?>
+			<div id="psview-modal" style="display: none;">
+				<div class="psview-modal-overlay">
+					<div class="psview-modal-wrapper">
+						<?php wp_editor( '', 'psview_insert_editor' ); ?>
+						<div class="premise-clear"><br></div>
+						<?php premise_field( 'submit', array( 'id' => 'psview-insert-content', 'wrapper_class' => 'premise-inline-block premise-float-left' ) ); ?>
+						<?php premise_field( 'button', array( 'id' => 'psview-insert-cancel', 'value' => 'cancel', 'wrapper_class' => 'premise-inline-block premise-float-right' ) ); ?>
+						<div class="premise-clear"></div>
+					</div>
+				</div>
+			</div>
+			<?php
+			$html = ob_get_clean();
+		}
+		echo $html;
 	}
 
 

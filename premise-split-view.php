@@ -140,7 +140,10 @@ class Premise_Split_View {
 		if ( class_exists( 'PremiseCPT' ) )
 			new PremiseCPT( $this->cpt_args['name'], $this->cpt_args['args'] );
 
-		add_action( 'admin_init', array( $this, 'init_ui' ) );
+		// add_action( 'admin_init', array( $this, 'init_ui' ) );
+
+		add_action( 'load-post.php', array( PSV_CPT_UI::get_instance(), 'render_ui' ) );
+		add_action( 'load-post-new.php', array( PSV_CPT_UI::get_instance(), 'render_ui' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 
@@ -149,6 +152,8 @@ class Premise_Split_View {
 		add_filter( 'the_content', array( PSV_Render_View::get_instance(), 'init' ) );
 
 		add_shortcode( 'psview', array( PSV_Shortcode::get_instance(), 'init' ) );
+
+		add_action( 'admin_footer', array( PSV_CPT_UI::get_instance(), 'insert_footer' ) );
 	}
 
 
@@ -180,8 +185,7 @@ class Premise_Split_View {
 	 * @return void does not return anything
 	 */
 	public function init_ui() {
-		add_action( 'load-post.php', array( PSV_CPT_UI::get_instance(), 'render_ui' ) );
-		add_action( 'load-post-new.php', array( PSV_CPT_UI::get_instance(), 'render_ui' ) );
+
 	}
 
 

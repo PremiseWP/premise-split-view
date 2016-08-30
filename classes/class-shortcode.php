@@ -222,7 +222,7 @@ class PSV_Shortcode {
 
 			// Return empty string as default.
 			default:
-				$_html = '';
+				$_html = $this->insert_content( $cont );
 				break;
 		}
 
@@ -292,6 +292,20 @@ class PSV_Shortcode {
 		}
 
 		$_html = '<div class="psv-content-image" style="background-image: url('.$url.');"></div>';
+
+		return $_html;
+	}
+
+
+	protected function insert_content( $content = '' ) {
+		if ( ! empty( $content ) ) {
+			$_html = '<div class="psv-content-post">
+				<div class="psv-post-content">' . wpautop( wptexturize( $content ) ) . '</div>
+			</div>';
+		}
+		else {
+			$_html = 'No content was inserted';
+		}
 
 		return $_html;
 	}
