@@ -3,7 +3,7 @@
  * Plugin Name: Premise Split View
  * Plugin URI:  https://github.com/PremiseWP/premise-split-view
  * Description: Create Split Views.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      Premise WP
  * Author URI:  http://premisewp.com
  * License:     GPL
