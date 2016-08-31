@@ -2,7 +2,8 @@
 
 	$(document).ready(function() {
 
-		var modal = $( '#psview-modal' ),
+		var psviewEditor = null,
+		modal = $( '#psview-modal' ),
 		modalOverlay = modal.find( '.psview-modal-overlay' );
 
 		$('.psv-cpt-ui').length > 0 ? psvToggleSelect() : false;
@@ -10,7 +11,7 @@
 		$( '.psview-edit-insert' ).click(function(){
 			var side = ( 0 < $(this).parents( '.psv-ui-left' ).length ) ? 'left' : 'right';
 			displayModal( side );
-		})
+		});
 
 
 		function psvToggleSelect() {
@@ -31,8 +32,9 @@
 
 
 		function displayModal( side ) {
-			var psviewEditor = tinyMCE.get('psview_insert_editor'),
-			oldContent       = $( '#premise_split_view-'+side+'-Insert' ).val();
+			var oldContent       = $( '#premise_split_view-'+side+'-Insert' ).val();
+
+			psviewEditor = ( null === psviewEditor ) ? tinyMCE.get('psview_insert_editor') : psviewEditor;
 
 			modal.fadeIn('fast');
 			psviewEditor.setContent( oldContent );
