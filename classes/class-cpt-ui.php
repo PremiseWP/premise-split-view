@@ -241,7 +241,8 @@ class PSV_CPT_UI {
 		$post_types = array( 'premise_split_view' );
 
 		$html = '';
-		if ( in_array( $post->post_type, $post_types ) ) {
+		if ( $post
+			&& in_array( $post->post_type, $post_types ) ) {
 			ob_start();
 			?>
 			<div id="psview-modal" style="display: none;">
