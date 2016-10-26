@@ -39,6 +39,10 @@ define( 'PREMISE_SPLITV_URL', plugin_dir_url( __FILE__ ) );
 // Must use 'plugins_loaded' hook.
 add_action( 'plugins_loaded', array( Premise_Split_View::get_instance(), 'setup' ) );
 
+// Install Plugin.
+register_activation_hook( __FILE__, array( 'Premise_Split_View', 'do_install' ) );
+
+
 /**
  * Load plugin!
  *
@@ -136,7 +140,7 @@ class Premise_Split_View {
 
 		$this->includes();
 
-		// Create custom post type for split Views
+		// Create custom post type for split Views.
 		if ( class_exists( 'PremiseCPT' ) )
 			new PremiseCPT( $this->cpt_args['name'], $this->cpt_args['args'] );
 
@@ -154,6 +158,9 @@ class Premise_Split_View {
 		add_shortcode( 'psview', array( PSV_Shortcode::get_instance(), 'init' ) );
 
 		add_action( 'admin_footer', array( PSV_CPT_UI::get_instance(), 'insert_footer' ) );
+
+		// Add rewrite flush rules on init with a higher priority than 10.
+		add_action( 'init', array( $this, 'psv_maybe_flush_rules' ), 11 );
 	}
 
 
@@ -180,7 +187,7 @@ class Premise_Split_View {
 
 
 	/**
-	 * initiates the UI. registers the custom post type UI
+	 * Initiates the UI. registers the custom post type UI
 	 *
 	 * @return void does not return anything
 	 */
@@ -206,7 +213,7 @@ class Premise_Split_View {
 
 
 	/**
-	 * resgister the front end scripts
+	 * Resgister the front end scripts
 	 *
 	 * @return void does not return anything
 	 */
@@ -216,6 +223,42 @@ class Premise_Split_View {
 
 		wp_register_script( 'psv_fe_js', $this->plugin_url . '/js/frontend/psv-fe.min.js', array( 'jquery' ) );
 		wp_enqueue_script( 'psv_fe_js' );
+	}
+
+
+
+
+	/**
+	 * Install
+	 *
+	 * @since 1.0.2
+	 *
+	 * @param boolean $networkwide Network wide?.
+	 */
+	public static function do_install( $networkwide ) {
+		// Save an option in the DB when this plugin gets installed to flush rewrite rules on init.
+		if ( ! get_option( '_psv_activation_happened' ) )
+			add_option( '_psv_activation_happened', true );
+	}
+
+
+
+
+
+	/**
+	 * Flush rewrite rules if our plugin was just activated.
+	 *
+	 * @since 1.0.2
+	 *
+	 * @return void does not return anything
+	 */
+	public function psv_maybe_flush_rules() {
+		// If this option exists we just activated the plugin, flush rewrite rules.
+		if ( get_option( '_psv_activation_happened' ) ) {
+			flush_rewrite_rules();
+			// Delete the option so we dont flush rules again.
+			delete_option( '_psv_activation_happened' );
+		}
 	}
 
 
