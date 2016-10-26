@@ -7,10 +7,10 @@
 		padding: 125% 0 0 0;
 	}
 
-	.psv-compare-wrapper .psv-compare-front {
+	/*.psv-compare-wrapper .psv-compare-front {
 		/*width: 100%;  For mobile, we start at full width */
-		width: 65%;
-	}
+		/*width: 65%;
+	}*/
 }
 
 /*.psv-compare-wrapper.psv-mobile .psv-compare-handle:before,
