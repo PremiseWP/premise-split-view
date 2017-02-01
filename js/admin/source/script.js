@@ -18,7 +18,7 @@
 			$('#premise_split_view-left-type, #premise_split_view-right-type').change(function(){
 				var type = $(this).val(),
 				side = $(this).is( '#premise_split_view-left-type' ) ? 'left' : 'right';
-
+				console.log( type );
 				if ( 'Insert' == type ) {
 					displayModal( side );
 				}
@@ -26,7 +26,7 @@
 				$(this).parents('.psv-cpt-ui').find('.psv-insert-content').removeClass( 'psv-content-active' );
 				$(this).parents('.psv-cpt-ui').find('.psv-insert-'+type).addClass( 'psv-content-active' );
 
-				return false;
+				// return false;
 			});
 		}
 
