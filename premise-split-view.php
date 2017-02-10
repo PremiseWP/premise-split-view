@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Premise Split View
  * Plugin URI:  https://github.com/PremiseWP/premise-split-view
- * Description: Create Split Views.
- * Version:     1.0.1
+ * Description: Standout from the rest of the sites your users visit. Show your content in a fun way that is both engaging and easy to digest.
+ * Version:     1.1.0
  * Author:      Premise WP
  * Author URI:  http://premisewp.com
  * License:     GPL
@@ -11,29 +11,14 @@
  * @package PSV
  */
 
-
-
 // Block direct access to this file.
 defined( 'ABSPATH' ) or die();
 
-
-
-
-/**
- * Define plugin path
- */
+// Define plugin path
 define( 'PREMISE_SPLITV_PATH', plugin_dir_path( __FILE__ ) );
 
-
-
-
-/**
- * Define plugin url
- */
+// Define plugin url
 define( 'PREMISE_SPLITV_URL', plugin_dir_url( __FILE__ ) );
-
-
-
 
 // Instantiate our main class and setup plugin
 // Must use 'plugins_loaded' hook.
@@ -42,14 +27,10 @@ add_action( 'plugins_loaded', array( Premise_Split_View::get_instance(), 'setup'
 // Install Plugin.
 register_activation_hook( __FILE__, array( 'Premise_Split_View', 'do_install' ) );
 
-
 /**
- * Load plugin!
- *
- * This is the plugin's main class.
+ * Premise Split View main class. This class initiates the plugin.
  */
 class Premise_Split_View {
-
 
 	/**
 	 * Plugin instance.
@@ -60,9 +41,6 @@ class Premise_Split_View {
 	 */
 	protected static $instance = null;
 
-
-
-
 	/**
 	 * Plugin url
 	 *
@@ -70,17 +48,12 @@ class Premise_Split_View {
 	 */
 	public $plugin_url = PREMISE_SPLITV_URL;
 
-
-
-
 	/**
 	 * Plugin path
 	 *
 	 * @var strin
 	 */
 	public $plugin_path = PREMISE_SPLITV_PATH;
-
-
 
 	/**
 	 * The arguments used to create our custom post type
@@ -99,8 +72,6 @@ class Premise_Split_View {
 		),
 	);
 
-
-
 	/**
 	 * Constructor. Intentionally left empty and public.
 	 *
@@ -108,10 +79,6 @@ class Premise_Split_View {
 	 * @since 	1.0
 	 */
 	public function __construct() {}
-
-
-
-
 
 	/**
 	 * Access this plugin’s working instance
@@ -125,10 +92,6 @@ class Premise_Split_View {
 		return self::$instance;
 	}
 
-
-
-
-
 	/**
 	 * Setup Premise
 	 *
@@ -140,30 +103,31 @@ class Premise_Split_View {
 
 		$this->includes();
 
-		// Create custom post type for split Views.
-		if ( class_exists( 'PremiseCPT' ) )
-			new PremiseCPT( $this->cpt_args['name'], $this->cpt_args['args'] );
+		if ( class_exists( 'PremiseCPT' ) ) {
 
-		// add_action( 'admin_init', array( $this, 'init_ui' ) );
+			new PremiseCPT( $this->cpt_args['name'] , $this->cpt_args['args'] );
 
-		add_action( 'load-post.php', array( PSV_CPT_UI::get_instance(), 'render_ui' ) );
-		add_action( 'load-post-new.php', array( PSV_CPT_UI::get_instance(), 'render_ui' ) );
+			add_action( 'admin_enqueue_scripts'     , array( $this                           , 'admin_scripts' ) );
+			add_action( 'wp_enqueue_scripts'        , array( $this                           , 'fe_scripts' ) );
+			add_filter( 'the_content'               , array( PSV_Render_View::get_instance() , 'init' ) );
+			add_action( 'admin_footer'              , array( PSV_CPT_UI::get_instance()      , 'insert_footer' ) );
+			add_shortcode( 'pwp_splitview'          , array( PSV_Shortcode::get_instance()   , 'init' ) );
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+			pwp_add_metabox(
+				array(
+					'title'    => 'Premise SPlit View',
+					'callback' => array( PSV_CPT_UI::get_instance(), 'split_view_ui' )
+				),
+				'premise_split_view',
+				'',
+				'premise_split_view'
+			);
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'fe_scripts' ) );
-
-		add_filter( 'the_content', array( PSV_Render_View::get_instance(), 'init' ) );
-
-		add_shortcode( 'pwp_splitview', array( PSV_Shortcode::get_instance(), 'init' ) );
-
-		add_action( 'admin_footer', array( PSV_CPT_UI::get_instance(), 'insert_footer' ) );
-
-		// Add rewrite flush rules on init with a higher priority than 10.
-		add_action( 'init', array( $this, 'psv_maybe_flush_rules' ), 11 );
+			// Add rewrite flush rules on init with a higher priority than 10.
+			// if we created the cpt.
+			add_action( 'init', array( $this, 'psv_maybe_flush_rules' ), 11 );
+		}
 	}
-
-
 
 	/**
 	 * Include all necessary files for our plugin to work properly.
@@ -177,22 +141,13 @@ class Premise_Split_View {
 			require_once PREMISE_SPLITV_PATH . 'includes/class-tgm-plugin-activation.php';
 
 			add_action( 'tgmpa_register', array( $this, 'pwpsv_register_required_plugins' ) );
+
+			return;
 		}
 
 		include 'classes/class-cpt-ui.php';
 		include 'classes/class-render.php';
 		include 'classes/class-shortcode.php';
-	}
-
-
-
-	/**
-	 * Initiates the UI. registers the custom post type UI
-	 *
-	 * @return void does not return anything
-	 */
-	public function init_ui() {
-
 	}
 
 
@@ -272,7 +227,7 @@ class Premise_Split_View {
 	 *
 	 * @link https://github.com/PremiseWP/Premise-WP
 	 */
-	function pwpsv_register_required_plugins() {
+	public function pwpsv_register_required_plugins() {
 		/*
 		 * Array of plugin arrays. Required keys are name and slug.
 		 * If the source is NOT from the .org repo, then source is also required.
@@ -285,7 +240,6 @@ class Premise_Split_View {
 				'source'           => 'https://github.com/PremiseWP/Premise-WP/archive/master.zip',
 				'required'         => true,
 				'force_activation' => false,
-				'version'          => '1.4.3',
 			),
 		);
 

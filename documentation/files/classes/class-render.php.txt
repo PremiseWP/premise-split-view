@@ -74,7 +74,7 @@ class PSV_Render_View {
 
 			$this->id = $post->ID;
 
-			return do_shortcode( '[psview id="'.$this->id.'"]' );
+			return do_shortcode( '[pwp_splitview id="'.$this->id.'"]' );
 		}
 
 		else {

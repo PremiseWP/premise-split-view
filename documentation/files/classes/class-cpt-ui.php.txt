@@ -19,23 +19,19 @@ class PSV_CPT_UI {
 	 */
 	protected static $instance = null;
 
-
-
 	/**
 	 * Holds array of types of content available for a user to insert.
 	 *
 	 * @var array
 	 */
 	public $type_options = array(
-		'Insert...'              => '',
-		'Post / Page'            => 'Post',
-		'Shortcode'              => 'Shortcode',
-		'YouTube or Vimeo Video' => 'YouTube',
-		'Image / Media'          => 'Image',
+		'Insert...'         => '',
+		'Post or Page'      => 'Post',
+		'Shortcode'         => 'Shortcode',
+		'Full Screen Video' => 'YouTube',
+		'Full Screen Image' => 'Image',
+		'Insert My Own'     => 'Insert',
 	);
-
-
-
 
 	/**
 	 * Access this plugin’s working instance
@@ -49,51 +45,10 @@ class PSV_CPT_UI {
 		return self::$instance;
 	}
 
-
-
 	/**
 	 * Intentionally left blank
 	 */
 	function __construct() {}
-
-
-
-	/**
-	 * Register hooks for metabox and saving fields into post
-	 */
-	public function render_ui() {
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
-		add_action( 'save_post'     , array( $this, 'save' ) );
-	}
-
-
-
-
-
-	/**
-	 * Adds the meta box container.
-	 *
-	 * @param string $post_type Post type.
-	 */
-	public function add_meta_box( $post_type ) {
-		$post_types = array( 'premise_split_view' );
-
-		if ( in_array( $post_type, $post_types ) ) {
-			add_meta_box(
-				'premise-split-view',
-				'Build A Split View',
-				array( $this, 'split_view_ui' ),
-				$post_type,
-				'advanced',
-				'high'
-			);
-		}
-	}
-
-
-
-
-
 
 	/**
 	 * Render Meta Box content.
@@ -107,7 +62,7 @@ class PSV_CPT_UI {
 		?>
 		<div class="premise-ui-intro">
 			<p>Insert the content you would like to display on each side of the Split View.
-			<br>To insert this Split View anywhere in your site use the following shortcode <code>[psview id="<?php echo $post->ID; ?>"]</code></p>
+			<br>To insert this Split View anywhere in your site use the following shortcode <code>[pwp_splitview id="<?php echo $post->ID; ?>"]</code></p>
 		</div>
 		<div class="premise-row premise-relative">
 			<div class="col2 premise-align-center">
@@ -129,19 +84,17 @@ class PSV_CPT_UI {
 			<p>Change the color of the Split View controls.</p>
 		</div>
 		<div class="premise-row">
-			<?php premise_field(
-				'wp_color',
-				array(
+			<?php pwp_field( array(
+					'type'          => 'wp_color',
 					'default'       => '#1652db', // Default blue.
 					'name'          => 'premise_split_view[color]',
-					'wrapper_class' => 'span12',
+					'wrapper_class' => 'span5',
+					'context'       => 'post',
 				)
 			); ?>
 		</div>
 		<?php
 	}
-
-
 
 	/**
 	 * Insert the selct type fields
@@ -163,9 +116,6 @@ class PSV_CPT_UI {
 		echo '</div>';
 	}
 
-
-
-
 	/**
 	 * Insert content fields
 	 *
@@ -179,6 +129,7 @@ class PSV_CPT_UI {
 			'Shortcode' => 'text',
 			'YouTube'   => 'video',
 			'Image'     => 'wp_media',
+			'Insert'    => 'textarea',
 		);
 
 		$html = '';
@@ -187,24 +138,33 @@ class PSV_CPT_UI {
 			$args = array(
 				'context' => 'post',
 				'name'    => 'premise_split_view['.$side.']['.$k.']',
+				'type'    => $v,
 			);
 
 			if ( 'Post' == $k ) {
 				$args['options'] = $this->get_post_options();
 			}
 
+			if ( 'YouTube' == $k ) {
+				$args['placeholder'] = 'Video ID or URL - YouTube, Vimeo or Wistia';
+			}
+
 			$html .= '<div class="psv-insert-content premise-absolute psv-insert-' . $k;
 			$html .= $k == premise_get_value( 'premise_split_view[' . $side . '][type]', 'post' ) ? ' psv-content-active">' : '">';
 
-				$html .= premise_field( $v, $args, false );
+				if ( 'Insert' == $k ) {
+					$args['class'] = 'premise-hidden';
+
+					$html .= '<a href="javascript:;" class="premise-btn pwpsv-edit-insert">Edit Content</a>';
+				}
+
+				$html .= pwp_field( $args, false );
 
 			$html .= '</div>';
 		}
 
 		echo $html;
 	}
-
-
 
 	/**
 	 * Get a list of all post and pages for our select dropdown
@@ -226,43 +186,35 @@ class PSV_CPT_UI {
 		return $options;
 	}
 
-
-
-
-
 	/**
-	 * Save the meta when the post is saved.
+	 * Insert the modal usede to insert content using the WYSIWYG editor in the aplit view.
 	 *
-	 * @todo add validation before saving data.
-	 *
-	 * @param int $post_id The ID of the post being saved.
+	 * @return string the html for the modal
 	 */
-	public function save( $post_id ) {
-		if ( ! isset( $_POST['premise_split_view_nonce'] ) ) {
-			return $post_id;
+	public function insert_footer() {
+		global $post;
+		$post_types = array( 'premise_split_view' );
+
+		$html = '';
+		if ( $post
+			&& in_array( $post->post_type, $post_types ) ) {
+			ob_start();
+			?>
+			<div id="pwpsv-modal" style="display: none;">
+				<div class="pwpsv-modal-overlay">
+					<div class="pwpsv-modal-wrapper">
+						<?php wp_editor( '', 'pwpsv_insert_editor' ); ?>
+						<div class="premise-clear"><br></div>
+						<?php premise_field( 'submit', array( 'id' => 'pwpsv-insert-content', 'wrapper_class' => 'premise-inline-block premise-float-left' ) ); ?>
+						<?php premise_field( 'button', array( 'id' => 'pwpsv-insert-cancel', 'value' => 'cancel', 'wrapper_class' => 'premise-inline-block premise-float-right' ) ); ?>
+						<div class="premise-clear"></div>
+					</div>
+				</div>
+			</div>
+			<?php
+			$html = ob_get_clean();
 		}
-
-		$nonce = $_POST['premise_split_view_nonce'];
-
-		if ( ! wp_verify_nonce( $nonce, 'premise_split_view' ) ) {
-			return $post_id;
-		}
-
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return $post_id;
-		}
-
-		if ( 'premise_split_view' !== $_POST['post_type'] ) {
-			return $post_id;
-		}
-
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			return $post_id;
-		}
-
-		$mydata = $_POST['premise_split_view'];
-
-		update_post_meta( $post_id, 'premise_split_view', $mydata );
+		echo $html;
 	}
 }
 

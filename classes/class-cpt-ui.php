@@ -19,8 +19,6 @@ class PSV_CPT_UI {
 	 */
 	protected static $instance = null;
 
-
-
 	/**
 	 * Holds array of types of content available for a user to insert.
 	 *
@@ -35,9 +33,6 @@ class PSV_CPT_UI {
 		'Insert My Own'     => 'Insert',
 	);
 
-
-
-
 	/**
 	 * Access this plugin’s working instance
 	 *
@@ -50,51 +45,10 @@ class PSV_CPT_UI {
 		return self::$instance;
 	}
 
-
-
 	/**
 	 * Intentionally left blank
 	 */
 	function __construct() {}
-
-
-
-	/**
-	 * Register hooks for metabox and saving fields into post
-	 */
-	public function render_ui() {
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ), 1.01 );
-		add_action( 'save_post'     , array( $this, 'save' ) );
-	}
-
-
-
-
-
-	/**
-	 * Adds the meta box container.
-	 *
-	 * @param string $post_type Post type.
-	 */
-	public function add_meta_box( $post_type ) {
-		$post_types = array( 'premise_split_view' );
-
-		if ( in_array( $post_type, $post_types ) ) {
-			add_meta_box(
-				'premise-split-view',
-				'Build A Split View',
-				array( $this, 'split_view_ui' ),
-				$post_type,
-				'advanced',
-				'high'
-			);
-		}
-	}
-
-
-
-
-
 
 	/**
 	 * Render Meta Box content.
@@ -142,8 +96,6 @@ class PSV_CPT_UI {
 		<?php
 	}
 
-
-
 	/**
 	 * Insert the selct type fields
 	 *
@@ -163,9 +115,6 @@ class PSV_CPT_UI {
 			$this->insert_content( $side );
 		echo '</div>';
 	}
-
-
-
 
 	/**
 	 * Insert content fields
@@ -217,8 +166,6 @@ class PSV_CPT_UI {
 		echo $html;
 	}
 
-
-
 	/**
 	 * Get a list of all post and pages for our select dropdown
 	 *
@@ -239,8 +186,11 @@ class PSV_CPT_UI {
 		return $options;
 	}
 
-
-
+	/**
+	 * Insert the modal usede to insert content using the WYSIWYG editor in the aplit view.
+	 *
+	 * @return string the html for the modal
+	 */
 	public function insert_footer() {
 		global $post;
 		$post_types = array( 'premise_split_view' );
@@ -265,44 +215,5 @@ class PSV_CPT_UI {
 			$html = ob_get_clean();
 		}
 		echo $html;
-	}
-
-
-
-
-
-	/**
-	 * Save the meta when the post is saved.
-	 *
-	 * @todo add validation before saving data.
-	 *
-	 * @param int $post_id The ID of the post being saved.
-	 */
-	public function save( $post_id ) {
-		if ( ! isset( $_POST['premise_split_view_nonce'] ) ) {
-			return $post_id;
-		}
-
-		$nonce = $_POST['premise_split_view_nonce'];
-
-		if ( ! wp_verify_nonce( $nonce, 'premise_split_view' ) ) {
-			return $post_id;
-		}
-
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return $post_id;
-		}
-
-		if ( 'premise_split_view' !== $_POST['post_type'] ) {
-			return $post_id;
-		}
-
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			return $post_id;
-		}
-
-		$mydata = $_POST['premise_split_view'];
-
-		update_post_meta( $post_id, 'premise_split_view', $mydata );
 	}
 }
