@@ -130,12 +130,12 @@ class PSV_CPT_UI {
 			<p>Change the color of the Split View controls.</p>
 		</div>
 		<div class="premise-row">
-			<?php premise_field(
-				'wp_color',
-				array(
+			<?php pwp_field( array(
+					'type'          => 'wp_color',
 					'default'       => '#1652db', // Default blue.
 					'name'          => 'premise_split_view[color]',
-					'wrapper_class' => 'span12',
+					'wrapper_class' => 'span5',
+					'context'       => 'post',
 				)
 			); ?>
 		</div>
@@ -189,10 +189,15 @@ class PSV_CPT_UI {
 			$args = array(
 				'context' => 'post',
 				'name'    => 'premise_split_view['.$side.']['.$k.']',
+				'type'    => $v,
 			);
 
 			if ( 'Post' == $k ) {
 				$args['options'] = $this->get_post_options();
+			}
+
+			if ( 'YouTube' == $k ) {
+				$args['placeholder'] = 'Video ID or URL - YouTube, Vimeo or Wistia';
 			}
 
 			$html .= '<div class="psv-insert-content premise-absolute psv-insert-' . $k;
@@ -204,7 +209,7 @@ class PSV_CPT_UI {
 					$html .= '<a href="javascript:;" class="premise-btn psview-edit-insert">Edit Content</a>';
 				}
 
-				$html .= premise_field( $v, $args, false );
+				$html .= pwp_field( $args, false );
 
 			$html .= '</div>';
 		}
