@@ -2,13 +2,13 @@
 
 	$(document).ready(function() {
 
-		var psviewEditor = null,
-		modal = $( '#psview-modal' ),
-		modalOverlay = modal.find( '.psview-modal-overlay' );
+		var pwpsvEditor = null,
+		modal = $( '#pwpsv-modal' ),
+		modalOverlay = modal.find( '.pwpsv-modal-overlay' );
 
 		$('.psv-cpt-ui').length > 0 ? psvToggleSelect() : false;
 
-		$( '.psview-edit-insert' ).click(function(){
+		$( '.pwpsv-edit-insert' ).click(function(){
 			var side = ( 0 < $(this).parents( '.psv-ui-left' ).length ) ? 'left' : 'right';
 			displayModal( side );
 		});
@@ -34,16 +34,16 @@
 		function displayModal( side ) {
 			var oldContent       = $( '#premise_split_view-'+side+'-Insert' ).val();
 
-			psviewEditor = ( null === psviewEditor ) ? tinyMCE.get('psview_insert_editor') : psviewEditor;
+			pwpsvEditor = ( null === pwpsvEditor ) ? tinyMCE.get('pwpsv_insert_editor') : pwpsvEditor;
 
 			modal.fadeIn('fast');
-			psviewEditor.setContent( oldContent );
+			pwpsvEditor.setContent( oldContent );
 
 			// confirm inserting content
-			$( '#psview-insert-content' ).off().click( insertContent );
+			$( '#pwpsv-insert-content' ).off().click( insertContent );
 
 			// cancel inserting content
-			$( '#psview-insert-cancel' ).off().click( closeModal );
+			$( '#pwpsv-insert-cancel' ).off().click( closeModal );
 			// modalOverlay.off().click( function(e) {
 			// 	e.stopPropagation();
 			// 	closeModal();
@@ -57,7 +57,7 @@
 
 			// Insert the content to the corresponding side
 			function insertContent() {
-				var content = psviewEditor.getContent();
+				var content = pwpsvEditor.getContent();
 				$( '#premise_split_view-'+side+'-Insert' ).val( content );
 				closeModal();
 			}
@@ -65,7 +65,7 @@
 			// close the modal
 			function closeModal() {
 				modal.fadeOut( 'fast' );
-				psviewEditor.setContent( '' );
+				pwpsvEditor.setContent( '' );
 				return false;
 			}
 		}

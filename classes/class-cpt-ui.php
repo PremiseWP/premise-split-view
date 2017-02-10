@@ -108,7 +108,7 @@ class PSV_CPT_UI {
 		?>
 		<div class="premise-ui-intro">
 			<p>Insert the content you would like to display on each side of the Split View.
-			<br>To insert this Split View anywhere in your site use the following shortcode <code>[psview id="<?php echo $post->ID; ?>"]</code></p>
+			<br>To insert this Split View anywhere in your site use the following shortcode <code>[pwp_splitview id="<?php echo $post->ID; ?>"]</code></p>
 		</div>
 		<div class="premise-row premise-relative">
 			<div class="col2 premise-align-center">
@@ -206,7 +206,7 @@ class PSV_CPT_UI {
 				if ( 'Insert' == $k ) {
 					$args['class'] = 'premise-hidden';
 
-					$html .= '<a href="javascript:;" class="premise-btn psview-edit-insert">Edit Content</a>';
+					$html .= '<a href="javascript:;" class="premise-btn pwpsv-edit-insert">Edit Content</a>';
 				}
 
 				$html .= pwp_field( $args, false );
@@ -250,13 +250,13 @@ class PSV_CPT_UI {
 			&& in_array( $post->post_type, $post_types ) ) {
 			ob_start();
 			?>
-			<div id="psview-modal" style="display: none;">
-				<div class="psview-modal-overlay">
-					<div class="psview-modal-wrapper">
-						<?php wp_editor( '', 'psview_insert_editor' ); ?>
+			<div id="pwpsv-modal" style="display: none;">
+				<div class="pwpsv-modal-overlay">
+					<div class="pwpsv-modal-wrapper">
+						<?php wp_editor( '', 'pwpsv_insert_editor' ); ?>
 						<div class="premise-clear"><br></div>
-						<?php premise_field( 'submit', array( 'id' => 'psview-insert-content', 'wrapper_class' => 'premise-inline-block premise-float-left' ) ); ?>
-						<?php premise_field( 'button', array( 'id' => 'psview-insert-cancel', 'value' => 'cancel', 'wrapper_class' => 'premise-inline-block premise-float-right' ) ); ?>
+						<?php premise_field( 'submit', array( 'id' => 'pwpsv-insert-content', 'wrapper_class' => 'premise-inline-block premise-float-left' ) ); ?>
+						<?php premise_field( 'button', array( 'id' => 'pwpsv-insert-cancel', 'value' => 'cancel', 'wrapper_class' => 'premise-inline-block premise-float-right' ) ); ?>
 						<div class="premise-clear"></div>
 					</div>
 				</div>

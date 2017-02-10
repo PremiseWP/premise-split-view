@@ -40,7 +40,7 @@ body.wp-admin.Premise-WP {}
  * The modal
  */
 
-#psview-modal {
+#pwpsv-modal {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -52,7 +52,7 @@ body.wp-admin.Premise-WP {}
 	/*display: block !important;*/
 }
 
-#psview-modal .psview-modal-overlay {
+#pwpsv-modal .pwpsv-modal-overlay {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -60,7 +60,7 @@ body.wp-admin.Premise-WP {}
 	height: 100%;
 }
 
-#psview-modal .psview-modal-wrapper {
+#pwpsv-modal .pwpsv-modal-wrapper {
 	position: relative;
 	width: 90%;
 	height: auto;
@@ -73,17 +73,17 @@ body.wp-admin.Premise-WP {}
 	box-shadow: 0 0 100px 0px #444;
 }
 
-#psview-modal .psview-modal-wrapper #psview_insert_editor_ifr {
+#pwpsv-modal .pwpsv-modal-wrapper #pwpsv_insert_editor_ifr {
 	min-height: 300px;
 }
 
-#psview-modal #psview-insert-content {
+#pwpsv-modal #pwpsv-insert-content {
 	background-color: #148a43;
 	color: #ededed;
 	border: 1px solid #148a43;
 }
 
-#psview-modal #psview-insert-cancel {
+#pwpsv-modal #pwpsv-insert-cancel {
 	background-color: #d62323;
 	color: #ededed;
 	border: 1px solid #d62323;

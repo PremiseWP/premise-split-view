@@ -86,7 +86,7 @@ class PSV_Shortcode {
 
 		$this->atts = shortcode_atts( array(
 	        'id' => '',
-	    ), $atts, 'psview' );
+	    ), $atts, 'pwp_splitview' );
 
 	    // First, check if there is an id.
 		if ( isset( $this->atts['id'] ) && ! empty( $this->atts['id'] ) ) {

@@ -155,7 +155,7 @@ class Premise_Split_View {
 
 		add_filter( 'the_content', array( PSV_Render_View::get_instance(), 'init' ) );
 
-		add_shortcode( 'psview', array( PSV_Shortcode::get_instance(), 'init' ) );
+		add_shortcode( 'pwp_splitview', array( PSV_Shortcode::get_instance(), 'init' ) );
 
 		add_action( 'admin_footer', array( PSV_CPT_UI::get_instance(), 'insert_footer' ) );
 
@@ -176,7 +176,7 @@ class Premise_Split_View {
 			// Require Premise WP plugin with the help of TGM Plugin Activation.
 			require_once PREMISE_SPLITV_PATH . 'includes/class-tgm-plugin-activation.php';
 
-			add_action( 'tgmpa_register', array( $this, 'psview_register_required_plugins' ) );
+			add_action( 'tgmpa_register', array( $this, 'pwpsv_register_required_plugins' ) );
 		}
 
 		include 'classes/class-cpt-ui.php';
@@ -272,7 +272,7 @@ class Premise_Split_View {
 	 *
 	 * @link https://github.com/PremiseWP/Premise-WP
 	 */
-	function psview_register_required_plugins() {
+	function pwpsv_register_required_plugins() {
 		/*
 		 * Array of plugin arrays. Required keys are name and slug.
 		 * If the source is NOT from the .org repo, then source is also required.
@@ -293,7 +293,7 @@ class Premise_Split_View {
 		 * Array of configuration settings.
 		 */
 		$config = array(
-			'id'           => 'psview-tgmpa',
+			'id'           => 'pwpsv-tgmpa',
 			'default_path' => '',
 			'menu'         => 'tgmpa-install-plugins',
 			'parent_slug'  => 'plugins.php',
