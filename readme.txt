@@ -3,7 +3,7 @@ Contributors: premisewp
 Donate link: http://premisewp.com/donate
 Tags: split view, premise split view, premise wp, premise, premisewp
 Requires at least: 3.9.0
-Tested up to: 4.5
+Tested up to: 4.7
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -35,6 +35,17 @@ e.g.
 Go to the <a href="http://plugins.premisewp.com/premise-portfolio/premise-split-view/" target="_blank">Premise Split View Site</a>.
 
 == Changelog ==
+
+= 1.1.0 =
+* CSS fix handle not centered in responsive
+* Fix display bug: remove slideCenter animation on window.resize
+* Flush rewrite rules if our plugin was just activated.
+* fixed wp_color field not working properly
+* update short code handler and classes to match new version pwp
+* updated comments and documentation for the whole project
+
+= 1.0.1 =
+* New support to insert your own content on each side of the split view using the WO built in WYSIWIG editor.
 
 = 1.0.0 =
 * New version
