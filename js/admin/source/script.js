@@ -18,7 +18,7 @@
 			$('#premise_split_view-left-type, #premise_split_view-right-type').change(function(){
 				var type = $(this).val(),
 				side = $(this).is( '#premise_split_view-left-type' ) ? 'left' : 'right';
-				console.log( type );
+
 				if ( 'Insert' == type ) {
 					displayModal( side );
 				}
@@ -37,7 +37,9 @@
 			pwpsvEditor = ( null === pwpsvEditor ) ? tinyMCE.get('pwpsv_insert_editor') : pwpsvEditor;
 
 			modal.fadeIn('fast');
-			pwpsvEditor.setContent( oldContent );
+			if ( oldContent ) {
+				pwpsvEditor.setContent( oldContent );
+			}
 
 			// confirm inserting content
 			$( '#pwpsv-insert-content' ).off().click( insertContent );
@@ -57,6 +59,7 @@
 
 			// Insert the content to the corresponding side
 			function insertContent() {
+				console.log( pwpsvEditor );
 				var content = pwpsvEditor.getContent();
 				$( '#premise_split_view-'+side+'-Insert' ).val( content );
 				closeModal();
