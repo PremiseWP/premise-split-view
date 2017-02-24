@@ -30,7 +30,7 @@ class PSV_CPT_UI {
 		'Shortcode'         => 'Shortcode',
 		'Full Screen Video' => 'YouTube',
 		'Full Screen Image' => 'Image',
-		'Insert My Own'     => 'Insert',
+		'WYSIWYG'           => 'Insert',
 	);
 
 	/**
