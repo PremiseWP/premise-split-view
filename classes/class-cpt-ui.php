@@ -153,6 +153,8 @@ class PSV_CPT_UI {
 
 				if ( 'Insert' == $k ) {
 					$args['class'] = 'premise-hidden';
+					$args['before_field'] = '<div style="display:none;">';
+					$args['after_field'] = '</div>';
 
 					$html .= '<a href="javascript:;" class="premise-btn pwpsv-edit-insert">Edit Content</a>';
 				}

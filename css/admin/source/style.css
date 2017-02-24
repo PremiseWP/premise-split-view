@@ -29,11 +29,13 @@ body.wp-admin.Premise-WP {}
 	visibility: hidden;
 	opacity: 0;
 	transition: all .6s ease-in-out;
+	z-index: -9;
 }
 
 .psv-insert-content.psv-content-active {
 	visibility: visible;
 	opacity: 1;
+	z-index: 1;
 }
 
 /**

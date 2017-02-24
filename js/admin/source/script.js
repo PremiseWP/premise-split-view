@@ -32,20 +32,21 @@
 
 
 		function displayModal( side ) {
-			var oldContent       = $( '#premise_split_view-'+side+'-Insert' ).val();
+			var oldContent = $( '#premise_split_view-'+side+'-Insert' ).val();
 
-			pwpsvEditor = ( null === pwpsvEditor ) ? tinyMCE.get('pwpsv_insert_editor') : pwpsvEditor;
-
-			modal.fadeIn('fast');
-			if ( oldContent ) {
+			pwpsvEditor = tinymce.get('pwpsv_insert_editor');
+			if ( pwpsvEditor && oldContent ) {
 				pwpsvEditor.setContent( oldContent );
 			}
+
+			modal.fadeIn('fast');
 
 			// confirm inserting content
 			$( '#pwpsv-insert-content' ).off().click( insertContent );
 
 			// cancel inserting content
 			$( '#pwpsv-insert-cancel' ).off().click( closeModal );
+
 			// modalOverlay.off().click( function(e) {
 			// 	e.stopPropagation();
 			// 	closeModal();
@@ -59,8 +60,14 @@
 
 			// Insert the content to the corresponding side
 			function insertContent() {
-				console.log( pwpsvEditor );
-				var content = pwpsvEditor.getContent();
+				var content = '';
+				pwpsvEditor = tinymce.get('pwpsv_insert_editor');
+				if ( pwpsvEditor ) {
+					content = pwpsvEditor.getContent();
+				}
+				else {
+					content = modal.find('[name="pwpsv_insert_editor"]').val();
+				}
 				$( '#premise_split_view-'+side+'-Insert' ).val( content );
 				closeModal();
 			}
@@ -68,7 +75,13 @@
 			// close the modal
 			function closeModal() {
 				modal.fadeOut( 'fast' );
-				pwpsvEditor.setContent( '' );
+				pwpsvEditor = tinymce.get('pwpsv_insert_editor');
+				if ( pwpsvEditor ) {
+					pwpsvEditor.setContent( '' );
+				}
+				else {
+					modal.find('[name="pwpsv_insert_editor"]').val('');
+				}
 				return false;
 			}
 		}
