@@ -139,6 +139,7 @@
 	top: 0;
 	height: 100%;
 	width: 100%;
+	overflow: auto;
 }
 
 .psv-compare-left .psv-content {
@@ -169,7 +170,7 @@
 
 .psv-content-video,
 .premise-video,
-.psv-content-post,
+/*.psv-content-post,*/
 .psv-content-image {
 	left: 0;
 	top: 0;
@@ -180,5 +181,6 @@
 /* Post or Page */
 .psv-content-post {
 	padding: 20px 20px 20px 40px;
-	overflow: auto;
+	width: 100%;
+	height: auto;
 }

@@ -86,6 +86,7 @@ class PSV_Shortcode {
 
 		$this->atts = shortcode_atts( array(
 	        'id' => '',
+	        'height' => 'aspect-ratio', // aspect-ratio | auto | custom
 	    ), $atts, 'pwp_splitview' );
 
 	    // First, check if there is an id.
@@ -125,7 +126,7 @@ class PSV_Shortcode {
 	 */
 	protected function build() {
 		$_html = '<div class="psv-compare-wrapper">
-			<div class="psv-compare-inner">';
+			<div class="psv-compare-inner" data-height="' . esc_attr( $this->atts['height'] ) . '">';
 				// Get right and left side views.
 				foreach( $this->split_view as $side => $view ) {
 					// Get content if type exists and is not empty.
