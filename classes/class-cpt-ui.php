@@ -71,7 +71,7 @@ class PSV_CPT_UI {
 		?></div>
 		<div class="premise-ui-color"><?
 			pwp_field( array(
-					'before_field'  => '<p>Set the height of the split view. Enter amount in pixels or use \'auto\' to let the height be as tall as the content inside it (there would be no scroll inside the split view). Only works with posts/pages or Inserting your own content.</p>',
+					'before_field'  => '<p>Set the height of the split view. Enter amount in pixels or use \'auto\' to let the height be as tall as the content inside it (there would be no scroll inside the split view).</p>',
 					'type'          => 'text',
 					'name'          => 'premise_split_view[height]',
 					// 'wrapper_class' => 'span5',
