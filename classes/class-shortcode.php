@@ -301,7 +301,12 @@ class PSV_Shortcode {
 		return $_html;
 	}
 
-
+	/**
+	 * Insert content into either side of the split view. This is used to insert posts, shortcodes, and own content.
+	 *
+	 * @param  string $content string
+	 * @return string          the content wrapped in its propper html
+	 */
 	protected function insert_content( $content = '' ) {
 
 		if ( ! empty( $content ) ) {
