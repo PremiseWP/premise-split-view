@@ -59,41 +59,37 @@ class PSV_CPT_UI {
 
 		// Add an nonce field so we can check for it later.
 		wp_nonce_field( 'premise_split_view', 'premise_split_view_nonce' );
-		?>
-		<div class="premise-ui-intro">
+
+		?><div class="premise-ui-intro">
 			<p>Insert the content you would like to display on each side of the Split View.
-			<br>To insert this Split View anywhere in your site use the following shortcode <code>[pwp_splitview id="<?php echo $post->ID; ?>"]</code></p>
+			<br>To insert this Split View anywhere in your site use the following shortcode: <br><pre>[pwp_splitview id="<? echo $post->ID; ?>"]</pre></p>
 		</div>
-		<div class="premise-row premise-relative">
-			<div class="col2 premise-align-center">
-				<div class="psv-cpt-ui psv-ui-left">
-					<?php $this->select_type( 'left' ); ?>
-				</div>
-			</div>
+		<div class="premise-row premise-relative"><?
+				$this->select_type( 'left' );
+			?><div class="psv-ui-separator premise-absolute"></div><?
+				$this->select_type( 'right' );
+		?></div>
+		<div class="premise-ui-color"><?
+			pwp_field( array(
+					'before_field'  => '<p>Set the height of the split view. Enter amount in pixels or use \'auto\' to let the height be as tall as the content inside it (there would be no scroll inside the split view). Only works with posts/pages or Inserting your own content.</p>',
+					'type'          => 'text',
+					'name'          => 'premise_split_view[height]',
+					// 'wrapper_class' => 'span5',
+					'style'         => 'width:100px;',
+					'context'       => 'post',
+				)
+			);
 
-			<div class="psv-ui-separator premise-absolute"></div>
-
-			<div class="col2 premise-align-center">
-				<div class="psv-cpt-ui psv-ui-right">
-					<?php $this->select_type( 'right' ); ?>
-				</div>
-			</div>
-
-		</div>
-		<div class="premise-ui-color">
-			<p>Change the color of the Split View controls.</p>
-		</div>
-		<div class="premise-row">
-			<?php pwp_field( array(
+			pwp_field( array(
+					'before_field'  => '<p>Change the color of the Split View controls.</p>',
 					'type'          => 'wp_color',
 					'default'       => '#1652db', // Default blue.
 					'name'          => 'premise_split_view[color]',
 					'wrapper_class' => 'span5',
 					'context'       => 'post',
 				)
-			); ?>
-		</div>
-		<?php
+			);
+		?></div><?
 	}
 
 	/**
@@ -105,15 +101,18 @@ class PSV_CPT_UI {
 	 * @return string       html for fields for left or right side.
 	 */
 	public function select_type( $side = 'left' ) {
-		premise_field( 'select', array(
-			'context' => 'post',
-			'name'    => 'premise_split_view['.$side.'][type]',
-			'options' => $this->type_options,
-		));
-
-		echo '<div class="psv-ui-insert premise-relative">';
-			$this->insert_content( $side );
-		echo '</div>';
+		?><div class="col2 premise-align-center">
+			<div class="psv-cpt-ui psv-ui-<? echo esc_attr( $side ); ?>"><?
+				premise_field( 'select', array(
+					'context' => 'post',
+					'name'    => 'premise_split_view['.$side.'][type]',
+					'options' => $this->type_options,
+				));
+				?><div class="psv-ui-insert premise-relative"><?
+					$this->insert_content( $side );
+				?></div><?
+			?></div>
+		</div><?
 	}
 
 	/**

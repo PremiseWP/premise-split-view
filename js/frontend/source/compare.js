@@ -53,25 +53,28 @@
 		isResizing = false,
 		rightOffset = 10;
 
-		if ( height && 'undefined' !== typeof height && 'aspect-ratio' !== height ) {
-			var setHeight = 0;
-			if ( 'auto' == height && content.find('.psv-content-post').length > 0 ) {
-				var _h = 0;
-				content.each(function(){
-					// cont height
-					var _ch = $(this).find('.psv-content-post').outerHeight( true );
-					_h = ( _h <= _ch ) ? _ch : _h;
+		// set the height once everything else has loaded.
+		$(window).load(function(){
+			if ( height && 'undefined' !== typeof height && 'aspect-ratio' !== height ) {
+				var setHeight = 0;
+				if ( 'auto' == height && content.find('.psv-content-post').length > 0 ) {
+					var _h = 0;
+					content.each(function(){
+						// cont height
+						var _ch = $(this).find('.psv-content-post').outerHeight( true );
+						_h = ( _h <= _ch ) ? _ch : _h;
+					});
+					setHeight = _h;
+				}
+				else {
+					setHeight = height;
+				}
+				container.css({
+					'min-height': setHeight,
+					'padding': 0,
 				});
-				setHeight = _h;
 			}
-			else {
-				setHeight = height;
-			}
-			container.css({
-				'min-height': setHeight,
-				'padding': 0,
-			});
-		}
+		});
 
 		// set the content width to the same width of the container
 		content.width( container.width() );

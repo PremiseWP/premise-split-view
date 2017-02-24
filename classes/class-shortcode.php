@@ -82,11 +82,11 @@ class PSV_Shortcode {
 	 *
 	 * @return string html for the split view or error message
 	 */
-	public function init( $atts ) {
+	public function init( $atts, $content = '' ) {
 
 		$this->atts = shortcode_atts( array(
-	        'id' => '',
-	        'height' => 'aspect-ratio', // aspect-ratio | auto | custom
+	        'id'     => '',
+	        'height' => '', // aspect-ratio | auto | custom
 	    ), $atts, 'pwp_splitview' );
 
 	    // First, check if there is an id.
@@ -112,6 +112,10 @@ class PSV_Shortcode {
 
 			$this->left  = ( isset( $this->split_view['left'] ) && ! empty( $this->split_view['left'] ) )   ? $this->split_view['left']  : array();
 			$this->right = ( isset( $this->split_view['right'] ) && ! empty( $this->split_view['right'] ) ) ? $this->split_view['right'] : array();
+
+			if ( empty( $this->atts['height'] ) ) {
+				$this->atts['height'] = ( isset( $this->split_view['height'] ) && ! empty( $this->split_view['height'] ) ) ? $this->split_view['height'] : 'aspect-ratio';
+			}
 
 			$this->build();
 		}
@@ -218,12 +222,12 @@ class PSV_Shortcode {
 
 			// Get a Shortcode.
 			case 'Shortcode':
-				$_html = do_shortcode( $cont );
+				$_html = $this->insert_content( do_shortcode( $cont ) );
 				break;
 
 			// Return empty string as default.
 			default:
-				$_html = $this->insert_content( $cont );
+				$_html = $this->insert_content( '<div class="psv-post-content">' . wpautop( wptexturize( $cont ) ) . '</div>' );
 				break;
 		}
 
@@ -249,12 +253,12 @@ class PSV_Shortcode {
 
 		$post = (object) get_post( $id );
 
-		$_html = '<div class="psv-content-post">
-			<div class="psv-post-title">
+		$_html = $this->insert_content(
+			'<div class="psv-post-title">
 				<h3>' . wp_kses_data( $post->post_title ) . '</h3>
 			</div>
-			<div class="psv-post-content">' . wpautop( wptexturize( $post->post_content ) ) . '</div>
-		</div>';
+			<div class="psv-post-content">' . wpautop( wptexturize( $post->post_content ) ) . '</div>'
+		);
 
 		return $_html;
 	}
@@ -299,9 +303,10 @@ class PSV_Shortcode {
 
 
 	protected function insert_content( $content = '' ) {
+
 		if ( ! empty( $content ) ) {
 			$_html = '<div class="psv-content-post">
-				<div class="psv-post-content">' . wpautop( wptexturize( $content ) ) . '</div>
+				'.$content.'
 			</div>';
 		}
 		else {
